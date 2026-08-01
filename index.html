@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLOOM — a garden grown from daily practice</title>
+  <meta name="description" content="Every flower here is one morning of research. Click to plant your own. A generative portfolio piece about the discipline behind creative work." />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <span class="topbar__mark">BLOOM</span>
+    <nav class="topbar__right">
+      <span class="topbar__count" id="seed-count" aria-live="polite">5 mornings, 5 flowers</span>
+      <a class="topbar__link" href="/case-study.html">Case study →</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="garden" aria-label="Generative garden, click anywhere to plant a flower">
+      <canvas id="garden-canvas" aria-hidden="true"></canvas>
+
+      <div class="garden__content">
+        <p class="garden__eyebrow">A PORTFOLIO PIECE, GROWN NOT BUILT</p>
+        <h1 class="garden__title">Every day I research,<br />I plant <span class="garden__title-accent">one idea.</span></h1>
+        <p class="garden__hint">click anywhere in the garden to plant one of your own</p>
+      </div>
+
+      <button class="garden__scroll-cue" id="scroll-cue" aria-label="Scroll to read more">
+        <span></span>
+      </button>
+    </section>
+
+    <section class="note">
+      <p class="note__kicker">WHY A GARDEN</p>
+      <p class="note__body">A design portfolio usually shows finished things. This one shows the habit underneath them — the daily research ritual that feeds every project on this site. No two flowers are alike, because no two mornings are: each bloom's shape and colour are generated from that day's signal, not chosen by hand.</p>
+    </section>
+
+    <section class="note note--alt">
+      <p class="note__kicker">HOW IT GROWS</p>
+      <p class="note__body">Canvas 2D, no external renderer. Every stem and petal is tweened with GSAP against a plain data object — growth is a number between 0 and 1, eased with <code>elastic.out</code>, redrawn every frame. Colour comes from a small hash so the palette stays warm and consistent while every flower still looks singular.</p>
+    </section>
+
+    <section class="cta">
+      <p class="cta__label">The research this garden is grown from is public, daily, and real.</p>
+      <div class="cta__actions">
+        <a class="cta__link" href="/case-study.html">READ THE CASE STUDY</a>
+        <a class="cta__link cta__link--ghost" href="../webdesign-digest/INDEX.md" target="_blank" rel="noopener">SEE THE DAILY LOG →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>BLOOM — a portfolio concept, planted on 2026-07-14</span>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

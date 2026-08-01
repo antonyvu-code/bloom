@@ -1,0 +1,21 @@
+{
+  "name": "bloom",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "BLOOM — portfolio concept: a generative garden where every flower is one morning of research. Click to plant your own.",
+  "scripts": {
+    "mornings": "node scripts/count-mornings.mjs",
+    "predev": "node scripts/count-mornings.mjs",
+    "dev": "vite --port 5625",
+    "prebuild": "node scripts/count-mornings.mjs",
+    "build": "vite build",
+    "preview": "vite preview --port 5625"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5"
+  }
+}

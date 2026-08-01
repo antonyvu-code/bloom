@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLOOM — case study</title>
+  <meta name="description" content="The design and engineering decisions behind BLOOM — why a garden, why generative, why Canvas 2D, and how the flower count stays honest." />
+  <meta name="theme-color" content="#f5efe4" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#case-main">Skip to content</a>
+
+  <header class="topbar topbar--solid">
+    <a class="topbar__mark topbar__mark--link" href="/">← BLOOM</a>
+    <span class="topbar__clock">CASE STUDY</span>
+  </header>
+
+  <main id="case-main" class="case">
+    <header class="case__hero">
+      <p class="case__eyebrow">Design log · decisions</p>
+      <h1 class="case__title">Why the portfolio is a <span class="case__title-accent">garden.</span></h1>
+      <p class="case__lede">
+        BLOOM turns a real habit — one morning of design research, every day — into something
+        that grows on screen instead of sitting in a grid. This is the reasoning behind it: what
+        it&nbsp;solves, why it looks the way it does, and how it keeps itself honest.
+      </p>
+      <a class="case__demo-link" href="/">▶ Open the live garden</a>
+    </header>
+
+    <section class="case__section">
+      <p class="case__num">01</p>
+      <div class="case__body">
+        <h2>The premise</h2>
+        <p>
+          Most portfolios show finished things — a <em>gallery</em> of thumbnails a hiring lead skims
+          in eight seconds. That format hides the part that actually predicts good work: the habit
+          underneath it. BLOOM makes the habit the subject. The page is not a list of projects; it is
+          a picture of the discipline that feeds every project.
+        </p>
+        <p class="case__note">
+          The argument is literal. Each flower is one morning of research, so a fuller garden simply
+          means more mornings — the visual and the claim are the same thing.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <p class="case__num">02</p>
+      <div class="case__body">
+        <h2>A garden, not a grid</h2>
+        <p>
+          The metaphor sets every other decision. A garden is warm, slow, and cumulative — it rewards
+          returning, not scanning. So the palette is a warm field of terracotta, amber, rose, gold and
+          rust on a paper cream <code>#f5efe4</code>, the type is a single serif, and the one motion is
+          growth: stem, then leaf, then head. There is no dashboard chrome, because a garden has none.
+        </p>
+        <p class="case__note">
+          One accent does the pointing — terracotta <code>#c9552f</code> — used only for the eyebrow,
+          the count, and links. Everything else stays ink on paper.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <p class="case__num">03</p>
+      <div class="case__body">
+        <h2>Generative, but never random-looking</h2>
+        <p>
+          No two mornings are alike, so no two flowers are hand-placed. Each bloom's petal count, head
+          size, stem height, sway and colour come from a tiny hash — <code>sin(seed × 12.9898) × 43758.5</code>,
+          the fract of it taken as a unit value. The trick is <em>where</em> the randomness is allowed:
+          hue is picked from a fixed warm set, and saturation and lightness only wander inside a narrow
+          band. The result reads as a coherent garden that still never repeats a flower.
+        </p>
+        <p class="case__note">
+          Constrained generativity is the whole craft here — total randomness looks like noise, and a
+          fixed template looks stamped. The value sits in the deliberately small window between them.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <p class="case__num">04</p>
+      <div class="case__body">
+        <h2>Why Canvas 2D and GSAP, not WebGL</h2>
+        <p>
+          A garden of a few dozen flowers is <code>O(n)</code> with a small <em>n</em>. Canvas 2D draws
+          it at 60fps on any laptop, ships in a fraction of the bytes, and is trivial to debug. Reaching
+          for WebGL here would be over-engineering — and knowing when <strong>not</strong> to reach for
+          the GPU is itself the senior signal. Growth is a single number from 0 to 1 tweened by GSAP with
+          <code>elastic.out(1, 0.65)</code>; the draw loop reads that number, nothing more.
+        </p>
+        <p class="case__note">
+          The render loop pauses itself. An <code>IntersectionObserver</code> stops it when the garden
+          scrolls out of view, <code>visibilitychange</code> stops it when the tab is hidden, and under
+          <code>prefers-reduced-motion</code> it settles the moment every flower has finished growing —
+          no frames are spent on pixels no one is watching.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <p class="case__num">05</p>
+      <div class="case__body">
+        <h2>The count is real</h2>
+        <p>
+          The page claims each flower is one morning of research, so that number is not typed by hand.
+          A prebuild step (<code>scripts/count-mornings.mjs</code>) scans the actual daily-research log —
+          the sibling <code>webdesign-digest</code> folder — counts every <code>YYYY-MM-DD.md</code>
+          entry, and writes the total into a generated module the app imports. Add tomorrow's entry and
+          the seeded garden grows by one flower on the next build, untouched by me.
+        </p>
+        <p class="case__note">
+          It fails safe: if the log is missing at build time the count falls back to a single flower
+          dated today — the page would rather understate the habit than invent one.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <p class="case__num">06</p>
+      <div class="case__body">
+        <h2>Accessibility on a generative canvas</h2>
+        <p>
+          A drawn garden is invisible to a screen reader, so the meaning lives in the DOM, not the
+          pixels. The count sits in an <code>aria-live</code> region and updates as you plant; the canvas
+          is <code>aria-hidden</code> because it carries no information the text doesn't. There is a skip
+          link, landmark structure, visible focus rings, and the terracotta accent is checked to hold
+          WCAG&nbsp;AA contrast on the cream ground. Motion is a preference the page obeys, not a default
+          it imposes.
+        </p>
+      </div>
+    </section>
+
+    <section class="case__section">
+      <p class="case__num">07</p>
+      <div class="case__body">
+        <h2>What I'd grow next</h2>
+        <p>
+          The pipeline is built to widen. The same prebuild that counts mornings could read each entry's
+          topic and seed that day's flower from it, so the garden's colours would carry meaning rather
+          than only warmth. A nightly job could rebuild the page each morning, so the portfolio is never
+          more than a day stale — a garden that literally keeps growing while I sleep.
+        </p>
+      </div>
+    </section>
+
+    <footer class="case__end">
+      <p class="case__end-line">The page is a demo of the ritual. The real thing happens every morning.</p>
+      <div class="cta__actions">
+        <a class="cta__link" href="/">▶ Open the live garden</a>
+        <a class="cta__link cta__link--ghost" href="../webdesign-digest/INDEX.md" target="_blank" rel="noopener">Read the daily log →</a>
+      </div>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <span>BLOOM — a portfolio concept, planted on 2026-07-14</span>
+  </footer>
+</body>
+</html>
